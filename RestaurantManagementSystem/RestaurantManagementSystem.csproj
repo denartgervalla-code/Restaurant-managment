@@ -38,6 +38,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +67,7 @@
     <Compile Include="UI\PromptForm.cs" />
     <Compile Include="UI\ReceiptPrinter.cs" />
     <Compile Include="UI\UITheme.cs" />
+    <Compile Include="UI\WebApiServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

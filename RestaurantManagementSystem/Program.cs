@@ -11,7 +11,19 @@ namespace RestaurantManagementSystem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+            using (WebApiServer apiServer = new WebApiServer())
+            {
+                try
+                {
+                    apiServer.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Web frontend API could not start on http://localhost:5055/." + Environment.NewLine + ex.Message,
+                        "Frontend API", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                Application.Run(new LoginForm());
+            }
         }
     }
 }

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">🍽️</span>
+            <div>
+                <h1>Restaurant</h1>
+                <p>Management System</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a class="nav-link active" href="#pos">🧾 POS</a>
+            <a class="nav-link" href="#products">🍔 Products</a>
+            <a class="nav-link" href="#orders">👨‍🍳 Kitchen</a>
+            <a class="nav-link" href="#tables">🪑 Tables</a>
+            <a class="nav-link" href="#users">👤 Users</a>
+        </nav>
+
+        <div class="shift-card">
+            <span>Active Shift</span>
+            <strong>Evening Service</strong>
+            <small>Waiter: Denart</small>
+        </div>
+    </aside>
+
+    <main class="app">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Live Restaurant Console</p>
+                <h2>Welcome back, Admin</h2>
+            </div>
+            <div class="top-actions">
+                <button class="ghost-button" id="refreshButton">Refresh</button>
+                <button id="newOrderButton">+ New Order</button>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span>Open Orders</span>
+                <strong id="openOrdersCount">0</strong>
+                <small>Live from database</small>
+            </article>
+            <article class="stat-card">
+                <span>Tables Busy</span>
+                <strong id="tablesCount">0</strong>
+                <small>Available tables loaded</small>
+            </article>
+            <article class="stat-card">
+                <span>Kitchen Ready</span>
+                <strong id="readyOrdersCount">0</strong>
+                <small>Needs pickup</small>
+            </article>
+            <article class="stat-card accent">
+                <span>Today Sales</span>
+                <strong id="activeSales">€0.00</strong>
+                <small>Active order total</small>
+            </article>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="panel menu-panel" id="pos">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Touch Friendly</p>
+                        <h3>Menu Items</h3>
+                    </div>
+                    <select id="tableSelect">
+                        <option value="">Choose table</option>
+                    </select>
+                </div>
+
+                <div class="menu-grid" id="menuGrid">
+                    <div class="empty-state">Start the Windows Forms app, then press Refresh.</div>
+                </div>
+            </div>
+
+            <div class="panel order-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow" id="selectedTableLabel">No table selected</p>
+                        <h3>Current Order</h3>
+                    </div>
+                    <span class="status pending" id="cartStatus">Draft</span>
+                </div>
+
+                <div class="order-list" id="cartList">
+                    <div class="empty-state">Click a product to add it here.</div>
+                </div>
+
+                <div class="total-box">
+                    <span>Total</span>
+                    <strong id="cartTotal">€0.00</strong>
+                </div>
+
+                <div class="button-row">
+                    <button class="ghost-button" id="clearCartButton">Clear</button>
+                    <button id="sendOrderButton">Send Kitchen</button>
+                    <button class="ghost-button" id="printButton">Print</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid lower-grid">
+            <div class="panel" id="orders">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Kitchen Display</p>
+                        <h3>Active Orders</h3>
+                    </div>
+                </div>
+
+                <div class="kitchen-cards" id="ordersList">
+                    <div class="empty-state">Orders will appear here after they are sent.</div>
+                </div>
+            </div>
+
+            <div class="panel" id="tables">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Floor Plan</p>
+                        <h3>Tables</h3>
+                    </div>
+                </div>
+
+                <div class="table-grid" id="tableGrid">
+                    <div class="empty-state">Tables loading...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel data-panel" id="products">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow">Admin Panel</p>
+                    <h3>Products</h3>
+                </div>
+                <button id="reloadProductsButton">Reload Products</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>VAT</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <tr>
+                        <td colspan="5">Products loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
