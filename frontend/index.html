@@ -3,167 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Management System</title>
+    <title>Restaurant Control Center</title>
     <link rel="stylesheet" href="styles.css">
     <script src="app.js" defer></script>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="brand">
-            <span class="brand-icon">🍽️</span>
-            <div>
-                <h1>Restaurant</h1>
-                <p>Management System</p>
-            </div>
-        </div>
-
-        <nav class="nav">
-            <a class="nav-link active" href="#pos">🧾 POS</a>
-            <a class="nav-link" href="#products">🍔 Products</a>
-            <a class="nav-link" href="#orders">👨‍🍳 Kitchen</a>
-            <a class="nav-link" href="#tables">🪑 Tables</a>
-            <a class="nav-link" href="#users">👤 Users</a>
-        </nav>
-
-        <div class="shift-card">
-            <span>Active Shift</span>
-            <strong>Evening Service</strong>
-            <small>Waiter: Denart</small>
-        </div>
-    </aside>
-
-    <main class="app">
-        <header class="topbar">
-            <div>
-                <p class="eyebrow">Live Restaurant Console</p>
-                <h2>Welcome back, Admin</h2>
-            </div>
-            <div class="top-actions">
-                <button class="ghost-button" id="refreshButton">Refresh</button>
-                <button id="newOrderButton">+ New Order</button>
-            </div>
-        </header>
-
-        <section class="stats-grid">
-            <article class="stat-card">
-                <span>Open Orders</span>
-                <strong id="openOrdersCount">0</strong>
-                <small>Live from database</small>
-            </article>
-            <article class="stat-card">
-                <span>Tables Busy</span>
-                <strong id="tablesCount">0</strong>
-                <small>Available tables loaded</small>
-            </article>
-            <article class="stat-card">
-                <span>Kitchen Ready</span>
-                <strong id="readyOrdersCount">0</strong>
-                <small>Needs pickup</small>
-            </article>
-            <article class="stat-card accent">
-                <span>Today Sales</span>
-                <strong id="activeSales">€0.00</strong>
-                <small>Active order total</small>
-            </article>
-        </section>
-
-        <section class="dashboard-grid">
-            <div class="panel menu-panel" id="pos">
-                <div class="panel-header">
+    <div class="shell">
+        <section class="login-screen" id="loginScreen">
+            <div class="login-card">
+                <div class="login-brand">
+                    <span class="login-icon">🍽️</span>
                     <div>
-                        <p class="eyebrow">Touch Friendly</p>
-                        <h3>Menu Items</h3>
+                        <p class="eyebrow">Database Project</p>
+                        <h1>Restaurant Control Center</h1>
                     </div>
-                    <select id="tableSelect">
-                        <option value="">Choose table</option>
-                    </select>
                 </div>
 
-                <div class="menu-grid" id="menuGrid">
-                    <div class="empty-state">Start the Windows Forms app, then press Refresh.</div>
-                </div>
-            </div>
+                <p class="login-copy">Login with RFID and use the live system connected to the database.</p>
 
-            <div class="panel order-panel">
-                <div class="panel-header">
-                    <div>
-                        <p class="eyebrow" id="selectedTableLabel">No table selected</p>
-                        <h3>Current Order</h3>
-                    </div>
-                    <span class="status pending" id="cartStatus">Draft</span>
-                </div>
+                <label class="field">
+                    <span>RFID Code</span>
+                    <input id="rfidInput" type="text" placeholder="ADMIN001 or WAITER001">
+                </label>
 
-                <div class="order-list" id="cartList">
-                    <div class="empty-state">Click a product to add it here.</div>
-                </div>
-
-                <div class="total-box">
-                    <span>Total</span>
-                    <strong id="cartTotal">€0.00</strong>
-                </div>
+                <div class="demo-users" id="demoUsers"></div>
 
                 <div class="button-row">
-                    <button class="ghost-button" id="clearCartButton">Clear</button>
-                    <button id="sendOrderButton">Send Kitchen</button>
-                    <button class="ghost-button" id="printButton">Print</button>
+                    <button id="loginButton">Login</button>
+                    <button class="ghost-button" id="bootstrapButton">Refresh Data</button>
                 </div>
+
+                <p class="message" id="loginMessage"></p>
             </div>
         </section>
 
-        <section class="dashboard-grid lower-grid">
-            <div class="panel" id="orders">
-                <div class="panel-header">
+        <div class="app hidden" id="appRoot">
+            <aside class="sidebar">
+                <div class="brand">
+                    <span class="brand-icon">🍽️</span>
                     <div>
-                        <p class="eyebrow">Kitchen Display</p>
-                        <h3>Active Orders</h3>
+                        <strong>Restaurant RMS</strong>
+                        <small id="restaurantState">Connected to database</small>
                     </div>
                 </div>
 
-                <div class="kitchen-cards" id="ordersList">
-                    <div class="empty-state">Orders will appear here after they are sent.</div>
-                </div>
-            </div>
+                <nav class="nav">
+                    <button class="nav-link active" data-view="dashboard">Overview</button>
+                    <button class="nav-link" data-view="pos">POS</button>
+                    <button class="nav-link" data-view="kitchen">Kitchen</button>
+                    <button class="nav-link admin-only" data-view="admin">Admin</button>
+                </nav>
 
-            <div class="panel" id="tables">
-                <div class="panel-header">
+                <div class="session-card">
+                    <span>Logged in</span>
+                    <strong id="userName">-</strong>
+                    <small id="userRole">-</small>
+                    <button class="ghost-button" id="logoutButton">Logout</button>
+                </div>
+            </aside>
+
+            <main class="main">
+                <header class="topbar">
                     <div>
-                        <p class="eyebrow">Floor Plan</p>
-                        <h3>Tables</h3>
+                        <p class="eyebrow" id="viewEyebrow">Live Operations</p>
+                        <h2 id="viewTitle">Restaurant Overview</h2>
                     </div>
-                </div>
+                    <div class="top-actions">
+                        <button class="ghost-button" id="refreshAllButton">Refresh</button>
+                    </div>
+                </header>
 
-                <div class="table-grid" id="tableGrid">
-                    <div class="empty-state">Tables loading...</div>
-                </div>
-            </div>
-        </section>
+                <section class="view active" id="view-dashboard">
+                    <div class="stats-grid">
+                        <article class="stat-card">
+                            <span>Products</span>
+                            <strong id="statProducts">0</strong>
+                            <small>Loaded from database</small>
+                        </article>
+                        <article class="stat-card">
+                            <span>Tables</span>
+                            <strong id="statTables">0</strong>
+                            <small>Floor plan status</small>
+                        </article>
+                        <article class="stat-card">
+                            <span>Open Orders</span>
+                            <strong id="statOrders">0</strong>
+                            <small>Pending, preparing, ready</small>
+                        </article>
+                        <article class="stat-card accent">
+                            <span>Active Total</span>
+                            <strong id="statTotal">€0.00</strong>
+                            <small>Open orders only</small>
+                        </article>
+                    </div>
 
-        <section class="panel data-panel" id="products">
-            <div class="panel-header">
-                <div>
-                    <p class="eyebrow">Admin Panel</p>
-                    <h3>Products</h3>
-                </div>
-                <button id="reloadProductsButton">Reload Products</button>
-            </div>
+                    <div class="grid two-column">
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">Floor Status</p>
+                                    <h3>Tables</h3>
+                                </div>
+                            </div>
+                            <div class="table-grid" id="overviewTables"></div>
+                        </section>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>VAT</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="productsTableBody">
-                    <tr>
-                        <td colspan="5">Products loading...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">Kitchen Pulse</p>
+                                    <h3>Recent Orders</h3>
+                                </div>
+                            </div>
+                            <div class="kitchen-cards" id="overviewOrders"></div>
+                        </section>
+                    </div>
+                </section>
+
+                <section class="view" id="view-pos">
+                    <div class="grid pos-grid">
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">Waiter Station</p>
+                                    <h3>Create Order</h3>
+                                </div>
+                                <select id="tableSelect"></select>
+                            </div>
+                            <div class="menu-grid" id="menuGrid"></div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow" id="selectedTableLabel">Choose a table</p>
+                                    <h3>Current Cart</h3>
+                                </div>
+                                <span class="status pending">Draft</span>
+                            </div>
+                            <div class="order-list" id="cartList"></div>
+                            <div class="total-box">
+                                <span>Total</span>
+                                <strong id="cartTotal">€0.00</strong>
+                            </div>
+                            <div class="button-row">
+                                <button class="ghost-button" id="clearCartButton">Clear</button>
+                                <button id="sendOrderButton">Send to Kitchen</button>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">Cashier</p>
+                                <h3>Close Order / Payment</h3>
+                            </div>
+                            <select id="paymentOrderSelect"></select>
+                        </div>
+                        <div class="payment-row">
+                            <label class="field">
+                                <span>Payment Method</span>
+                                <select id="paymentMethod">
+                                    <option>Cash</option>
+                                    <option>Card</option>
+                                    <option>Mixed</option>
+                                </select>
+                            </label>
+                            <div class="total-box compact">
+                                <span>Selected Total</span>
+                                <strong id="paymentTotal">€0.00</strong>
+                            </div>
+                            <button id="closeOrderButton">Close Order</button>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="view" id="view-kitchen">
+                    <section class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">Kitchen Display</p>
+                                <h3>Active Orders</h3>
+                            </div>
+                        </div>
+                        <div class="kitchen-cards" id="kitchenOrders"></div>
+                    </section>
+                </section>
+
+                <section class="view" id="view-admin">
+                    <div class="grid admin-grid">
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">Database Tables</p>
+                                    <h3>Manage Data</h3>
+                                </div>
+                                <select id="adminEntitySelect">
+                                    <option value="Products">Products</option>
+                                    <option value="Categories">Categories</option>
+                                    <option value="Tables">Tables</option>
+                                    <option value="Halls">Halls</option>
+                                    <option value="Users">Users</option>
+                                </select>
+                            </div>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead id="adminTableHead"></thead>
+                                    <tbody id="adminTableBody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">Editor</p>
+                                    <h3>Save Record</h3>
+                                </div>
+                            </div>
+                            <form class="admin-form" id="adminForm"></form>
+                            <div class="button-row">
+                                <button class="ghost-button" id="newRecordButton" type="button">New</button>
+                                <button id="saveRecordButton" type="button">Save</button>
+                                <button class="danger-button" id="deleteRecordButton" type="button">Delete</button>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
 </body>
 </html>
